@@ -64,13 +64,17 @@ def create_app():
 
 def create_indices(app):
     from .model import Annotation
+    from annotator.document import Document
     with app.test_request_context():
         Annotation.create_all()
+        Document.create_all()
 
 def drop_indices(app):
     from .model import Annotation
+    from annotator.document import Document
     with app.test_request_context():
         Annotation.drop_all()
+        Document.drop_all()
 
 def create_db(app):
     from . import model

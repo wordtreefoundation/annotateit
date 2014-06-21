@@ -132,7 +132,7 @@ def _get_session_user():
         return User.fetch(username)
 
 def _add_annotation_link(annotation):
-    links = annotation['links'] = annotation.get('links', [])
+    links = annotation['link'] = annotation.get('link', [])
     html_link = {
         'rel': 'alternate',
         'type': 'text/html',
