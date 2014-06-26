@@ -1,9 +1,9 @@
-/.coverage
-/cover
-/.env
-/.tox
-/annotateit.egg-info
-/instance/annotateit.cfg
-/instance/*.db
-/.redo
+/app/.coverage
+/app/cover
+/app/.env
+/app/.tox
+/app/annotateit.egg-info
+/app/instance/annotateit.cfg
+/app/instance/*.db
+/app/.redo
 *.pyc

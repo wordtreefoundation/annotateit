@@ -21,9 +21,9 @@ def configure(app):
 
     # Optional settings
     c.setdefault('SQLALCHEMY_DATABASE_URI', env.get('DATABASE_URL',
-                                                    'sqlite:///%s/annotateit.db' % app.instance_path))
+                                                    'sqlite:////data/annotateit.db'))
     c.setdefault('DEFAULT_MAIL_SENDER', env.get('DEFAULT_MAIL_SENDER',
-                                                'AnnotateIt <no-reply@annotateit.org>'))
+                                                'AnnotateIt <no-reply@example.com>'))
 
     # ElasticSearch config
     c.setdefault('ELASTICSEARCH_HOST', env.get('ELASTICSEARCH_HOST', 'http://127.0.0.1:9200'))
