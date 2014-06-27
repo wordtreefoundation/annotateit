@@ -1,7 +1,7 @@
 from flask import g
 
-from annotator.annotation import Annotation as Annotation_
-from annotator.authz import permissions_filter
+from ..annotator.annotation import Annotation as Annotation_
+from ..annotator.authz import permissions_filter
 
 class Annotation(Annotation_):
 

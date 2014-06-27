@@ -7,7 +7,7 @@ class ConfigError(Exception):
 def configure(app):
     c = app.config
 
-    app.debug   = _switch('DEBUG', False)
+    app.debug   = _switch('DEBUG', True)
     app.testing = _switch('TESTING', False)
 
     c['CSRF_ENABLED'] = _switch('CSRF_ENABLED', True)

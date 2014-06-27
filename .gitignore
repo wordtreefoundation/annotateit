@@ -7,3 +7,4 @@
 /app/instance/*.db
 /app/.redo
 *.pyc
+.DS_Store

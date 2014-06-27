@@ -6,7 +6,6 @@ import sys
 import os
 
 import migrate.versioning.api as migrate
-from migrate.versioning.exceptions import DatabaseAlreadyControlledError 
 
 import annotateit
 from annotateit import db
@@ -15,55 +14,63 @@ from annotateit.model import Consumer, User
 if __name__ == '__main__':
     app = annotateit.create_app()
 
-    print("\nCreating ElasticSearch indices... ")
-    annotateit.create_indices(app)
+    username = os.environ.get('ANNOTATEIT_USER', "admin")
+    print("AnnotateIt admin user: %s" % username)
 
-    print("\nCreating SQLite database... ")
+    password = os.environ.get('ANNOTATEIT_PASSWORD', "annotateit")
+    print("AnnotateIt admin password: %s" % password)
+
+    email = os.environ.get('ANNOTATEIT_EMAIL', "admin@example.com")
+    print("AnnotateIt admin email: %s" % email)
+
+    ckey = 'annotateit'
+    print("AnnotateIt primary consumer key: %s" % ckey)
 
     db_url = app.config['SQLALCHEMY_DATABASE_URI']
-    print("AnnotateIt database URL: %s\n" % db_url)
+    print("AnnotateIt database URL: %s" % db_url)
+
+
+    print("\nCreating ElasticSearch indices... ")
+    annotateit.create_indices(app)
+    print("done.\n")
 
     migrate_args = dict(url=db_url, debug='False', repository='migration')
     try:
+        print("Creating SQLite database... ")
         migrate.version_control(**migrate_args)
-    except DatabaseAlreadyControlledError:
+        print("done.\n")
+    except:
         print("  ...already created\n")
 
+    print("Migrating database... ")
     migrate.upgrade(**migrate_args)
+    print("done.")
 
-    print("done.\n")
-
-    username = os.environ.get('ANNOTATEIT_USER', "admin")
-    print("AnnotateIt admin user: %s\n" % username)
-
-    password = os.environ.get('ANNOTATEIT_PASSWORD', "annotateit")
-    print("AnnotateIt admin password set\n")
-
-    email = os.environ.get('ANNOTATEIT_EMAIL', "admin@example.com")
-    print("AnnotateIt admin email: %s\n" % email)
-
-    ckey = 'annotateit'
-    print("AnnotateIt primary consumer key: %s\n" % ckey)
 
     with app.test_request_context():
-        print("\nCreating admin user... ")
+        users_count = User.query.count()
+        print("Users in DB: " + str(users_count))
+        
+        if users_count == 0:
+            print("Creating admin user... ")
 
-        u = User(username, email, password)
-        u.is_admin = True
+            u = User(username, email, password)
+            u.is_admin = True
 
-        db.session.add(u)
-        db.session.commit()
+            db.session.add(u)
+            db.session.commit()
 
-        print("done.")
+            print("done.\n")
 
-        print("Creating primary consumer... ")
+            print("Creating primary consumer... ")
 
-        c = Consumer(ckey)
-        c.user_id = u.id
+            c = Consumer(ckey)
+            c.user_id = u.id
 
-        db.session.add(c)
-        db.session.commit()
+            db.session.add(c)
+            db.session.commit()
 
-        print("done.\n")
+            print("done.\n")
 
-        print("Primary consumer secret: %s" % c.secret)
+            print("Primary consumer key: %s" % c.key)
+            print("Primary consumer secret: %s" % c.secret)

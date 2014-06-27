@@ -6,7 +6,6 @@ setup(
     packages = find_packages(),
 
     install_requires = [
-        'annotator==0.11.1',
         'Flask==0.9',
         'Flask-Mail==0.7.2',
         'Flask-SQLAlchemy==0.16',
@@ -16,6 +15,8 @@ setup(
         'itsdangerous==0.17',
         'decorator==3.3.3',
         'iso8601==0.1.4',
-        'negotiate==0.0.1'
+        'negotiate==0.0.1',
+        'elasticsearch',
+        'PyJWT==0.1.4'
     ],
 )

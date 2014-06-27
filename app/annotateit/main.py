@@ -65,11 +65,6 @@ def contact():
 
     return render_template('contact.html', form=form)
 
-@main.route('/annotations')
-def annotations_index():
-    annotations = Annotation.search(limit=20)
-    return render_template('401.html'), 401
-
 @main.route('/annotations/<regex("[^\.]+"):id>')
 @main.route('/annotations/<regex("[^\.]+"):id>.<format>')
 @negotiate(JSEmbedFormatter, template='annotation.embed.js')
