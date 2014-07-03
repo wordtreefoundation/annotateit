@@ -23,9 +23,6 @@ if __name__ == '__main__':
     email = os.environ.get('ANNOTATEIT_EMAIL', "admin@example.com")
     print("AnnotateIt admin email: %s" % email)
 
-    ckey = 'annotateit'
-    print("AnnotateIt primary consumer key: %s" % ckey)
-
     db_url = app.config['SQLALCHEMY_DATABASE_URI']
     print("AnnotateIt database URL: %s" % db_url)
 
@@ -46,6 +43,8 @@ if __name__ == '__main__':
     migrate.upgrade(**migrate_args)
     print("done.")
 
+    ckey = os.environ.get('CONSUMER_KEY', 'annotateit')
+    csecret = os.environ.get('CONSUMER_SECRET', 'annotate.it.secret')
 
     with app.test_request_context():
         users_count = User.query.count()
@@ -66,6 +65,23 @@ if __name__ == '__main__':
 
             c = Consumer(ckey)
             c.user_id = u.id
+            c.secret = csecret
+
+            db.session.add(c)
+            db.session.commit()
+
+            print("done.\n")
+
+            print("Primary consumer key: %s" % c.key)
+            print("Primary consumer secret: %s" % c.secret)
+        else:
+            print("Updating primary consumer... ")
+
+            u = User.query.filter(username='admin').first()
+            c = Consumer.query.filter(user_id=u.id).first()
+
+            c.key = ckey
+            c.secret = csecret
 
             db.session.add(c)
             db.session.commit()
