@@ -1,4 +1,4 @@
-FROM dockerfile/python
+FROM wordtree/python-flask
 
 ADD app /opt/annotateit/
 
@@ -7,8 +7,6 @@ WORKDIR /opt/annotateit/
 ENV SECRET_KEY annotateit-change-me
 ENV RECAPTCHA_PUBLIC_KEY annotateit-change-me
 ENV RECAPTCHA_PRIVATE_KEY annotateit-change-me
-
-RUN pip install -e .
 
 VOLUME ["/data"]
 
